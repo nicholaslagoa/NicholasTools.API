@@ -1,29 +1,25 @@
 ﻿using MongoDB.Driver;
 using NicholasTools.API.Data.Configurations;
 using NicholasTools.API.Models;
-using System;
 using System.Collections.Generic;
 
 namespace NicholasTools.API.Data.Repositories
 {
-    public class TarefasRepository : ITarefasRepository
+    public class TarefasRepository : BaseRepository, ITarefasRepository
     {
         private readonly IMongoCollection<Tarefa> _tarefas;
-        public TarefasRepository(IDatabaseConfig databaseConfig)
+        public TarefasRepository(IDatabaseConfig databaseConfig) : base(databaseConfig)
         {
-            var client = new MongoClient(databaseConfig.ConnectionString);
-            var database = client.GetDatabase(databaseConfig.DatabaseName);
-
-            _tarefas = database.GetCollection<Tarefa>("tarefas");
+            _tarefas = _database.GetCollection<Tarefa>("tarefas");
         }
         public void Adicionar(Tarefa tarefa)
         {
             _tarefas.InsertOne(tarefa);
         }
 
-        public void Atualizar(string id, Tarefa tarefaAtualizada)
+        public void Atualizar(Tarefa tarefaAtualizada)
         {
-            _tarefas.ReplaceOne(x => x.Id == id, tarefaAtualizada);
+            _tarefas.ReplaceOne(x => x.Id == tarefaAtualizada.Id, tarefaAtualizada);
         }
 
         public IEnumerable<Tarefa> Buscar()

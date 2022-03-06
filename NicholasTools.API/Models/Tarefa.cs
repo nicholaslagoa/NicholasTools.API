@@ -1,9 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace NicholasTools.API.Models
 {
@@ -28,11 +26,11 @@ namespace NicholasTools.API.Models
         public DateTime DataCadastro { get; private set; }
         public DateTime? DataConclusao { get; private set; }
 
-        public void AtualizarTarefa(string nome, string detalhes, bool? concluido = false)
+        public void AtualizarTarefa(string nome, string detalhes, bool concluido = false)
         {
             Nome = nome;
             Detalhes = detalhes;
-            Concluido = concluido ?? false;
+            Concluido = concluido;
             DataConclusao = Concluido ? DateTime.Now : null;
         }
     }

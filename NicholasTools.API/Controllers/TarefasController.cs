@@ -3,6 +3,7 @@ using NicholasTools.API.Data.Repositories;
 using NicholasTools.API.Models;
 using NicholasTools.API.Models.InputModels;
 using System;
+using System.Net;
 
 namespace NicholasTools.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace NicholasTools.API.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Ocorreu um erro ao processar a requisição.");
             }
         }
 
@@ -46,7 +47,7 @@ namespace NicholasTools.API.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Ocorreu um erro ao processar a requisição.");
             }
         }
 
@@ -63,29 +64,29 @@ namespace NicholasTools.API.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Ocorreu um erro ao processar a requisição.");
             }
         }
 
-        // PUT api/tarefas/{id}
-        [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody]TarefaInputModel tarefaAtualizada)
+        // PUT api/tarefas/
+        [HttpPut]
+        public ActionResult Put([FromBody]TarefaInputModel tarefaAtualizada)
         {
             try
             {
-                var tarefa = _tarefasRepository.Buscar(id);
+                var tarefa = _tarefasRepository.Buscar(tarefaAtualizada.Id);
                 if (tarefa == null)
                     return NotFound();
 
                 tarefa.AtualizarTarefa(tarefaAtualizada.Nome, tarefaAtualizada.Detalhes, tarefaAtualizada.Concluido);
 
-                _tarefasRepository.Atualizar(id, tarefa);
+                _tarefasRepository.Atualizar(tarefa);
 
                 return Ok(tarefa);
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Ocorreu um erro ao processar a requisição.");
             }
         }
 
@@ -93,14 +94,21 @@ namespace NicholasTools.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(string id) 
         {
-            var tarefa = _tarefasRepository.Buscar(id);
-            
-            if (tarefa == null)
-                return NotFound();
+            try
+            {
+                var tarefa = _tarefasRepository.Buscar(id);
 
-            _tarefasRepository.RemoverTarefa(id);
+                if (tarefa == null)
+                    return NotFound();
 
-            return NoContent();
+                _tarefasRepository.RemoverTarefa(id);
+
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Ocorreu um erro ao processar a requisição.");
+            }
         }
     }
 }

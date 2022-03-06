@@ -36,7 +36,7 @@ namespace NicholasTools.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NicholasTools.API", Version = "v1" });
             });
 
-            Injector(ref services);
+            Injector(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,9 +58,9 @@ namespace NicholasTools.API
             });
         }
 
-        private void Injector(ref IServiceCollection services)
+        private void Injector(IServiceCollection services)
         {
-            services.AddSingleton<ITarefasRepository, TarefasRepository>();
+            services.AddTransient<ITarefasRepository, TarefasRepository>();
         }
     }
 }

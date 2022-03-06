@@ -7,7 +7,7 @@ namespace NicholasTools.API.Data.Repositories
     {
         void Adicionar(Tarefa tarefa);
         void RemoverTarefa(string id);
-        void Atualizar(string id, Tarefa tarefaAtualizada);
+        void Atualizar(Tarefa tarefaAtualizada);
         IEnumerable<Tarefa> Buscar();
         Tarefa Buscar(string id);
     }
